@@ -1,13 +1,14 @@
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const setCookies = require("../libs/utils");
 
 let register = async (req, res) => {
-    const { username, email, password } = req.body;
     try {
+        const { username, email, password } = req.body;
+
         const existingUser = await User.findOne({ email });
 
-        if (existingUser) return res.status(400).json({ msg: "Email already exists" });
+        if (existingUser) return res.status(400).json({ message: "Email already exists" });
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
@@ -15,16 +16,19 @@ let register = async (req, res) => {
             email,
             password: hashedPassword
         });
-        await newUser.save();
 
-        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
-        res.json({
-            token,
-            user: {
+        if (newUser) {
+            setCookies(newUser._id, res)
+            await newUser.save();
+
+            res.status(201).json({
                 id: newUser._id,
-                username, email
-            }
-        });
+                username: newUser.username,
+                email: newUser.email
+            });
+        } else {
+            res.status(400).json({ message: "Invalid user data" });
+        }
     }
     catch (err) {
         console.log("Error in signup controller", err.message);
@@ -32,32 +36,41 @@ let register = async (req, res) => {
     }
 }
 
-let login = async(req, res) => {
+let login = async (req, res) => {
     const { email, password } = req.body;
-    try{
+    try {
         const user = await User.findOne({ email });
-        
-        if (!user) return res.status(400).json({ msg: "User does not exist" });
+
+        if (!user) return res.status(400).json({ message: "User does not exist" });
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch){
-            return res.status(400).json({ msg: "Invalid credentials" });
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+        setCookies(user._id, res)
+
         res.json({
-            token,
-            user: {
-                id: user._id,
-                username: user.username,
-                email
-            }
+            id: user._id,
+            username: user.username,
+            email: user.email
         });
     }
-    catch(err){
+    catch (err) {
         console.log("Error in login controller", err.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
 
-module.exports = {register, login}
+const checkAuth = (req, res) =>{
+    try{
+        const user = req.user
+        res.status(200).json(user);
+    }
+    catch(err){
+        console.log("Error in checkAuth controller", err.message);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+module.exports = { register, login, checkAuth }
