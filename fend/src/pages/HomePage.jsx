@@ -7,17 +7,13 @@ import { useChat } from '../context/ChatContext';
 
 const HomePage = () => {
 
-    const {currentChat} = useChat();
+    const { currentChat } = useChat();
 
     return (
-        <div className="flex h-screen">
-            <div className="w-42">
-                <SideBar1 />
-            </div>
+        <div className="flex h-screen w-full overflow-hidden">
+            <SideBar1 />
 
-            <div className="w-98 border-l border-r overflow-hidden">
-                <SideBar2 />
-            </div>
+            <SideBar2 className={`w-full md:w-76 lg:w-94  flex-shrink-0 ${currentChat ? 'hidden md:flex' : ''} `} />
 
             <div className="flex-1">
                 {!currentChat ? <DummyChat /> : <ChatBox />}
