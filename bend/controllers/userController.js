@@ -51,7 +51,7 @@ let login = async (req, res) => {
         setCookies(user._id, res)
 
         res.json({
-            id: user._id,
+            _id: user._id,
             username: user.username,
             email: user.email
         });
@@ -65,6 +65,7 @@ let login = async (req, res) => {
 const checkAuth = (req, res) =>{
     try{
         const user = req.user
+        console.log(user)
         res.status(200).json(user);
     }
     catch(err){
@@ -73,4 +74,15 @@ const checkAuth = (req, res) =>{
     }
 }
 
-module.exports = { register, login, checkAuth }
+const logout = (req,res)=>{
+    try{
+        res.cookie("jwt","", {maxAge:0});
+        res.status(200).json({ message: "Logged out successfully" });
+    }
+    catch (err) {
+        console.log("Error in checkAuth controller", err.message);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+module.exports = { register, login, checkAuth, logout }

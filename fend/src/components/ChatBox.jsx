@@ -53,7 +53,7 @@ const ChatBox = () => {
   }
 
   return (
-    <div className="flex flex-col h-full flex-1 pb-16 md:pb-0 bg-gray-50">
+    <div className="flex flex-col h-full flex-1 md:pb-2 bg-gray-50">
       <ChatBoxHead/>
 
       <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 custom-scrollbar">
@@ -90,12 +90,8 @@ const ChatBox = () => {
         })}
         <div ref={messageEndRef} />
       </div>
-
-
-      <div className=" p-3 bg-white
-                fixed bottom-0 left-0 w-full sm:sticky sm:bottom-0 sm:w-auto">
-        <MessageInput />
-      </div>
+      
+      <MessageInput />
     </div>
   )
 }

@@ -29,10 +29,10 @@ const App = () => {
         <Route path='/random-chat' element={authUser ? <div>Random Chat Page</div> : <Navigate to='/auth'/>}/> */}
 
         <Route path='/auth' element={!authUser ? <AuthPage/> : <Navigate to='/'/>}>
+        <Route path='' element={<Navigate to='login'/>}/>
           <Route path='signup' element={<SignUp/>}/>
           <Route path='login' element={<Login/>}/>
         </Route>
-        <Route path='/logout' element={<div>logout</div>}/>
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
 

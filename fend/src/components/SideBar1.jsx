@@ -8,11 +8,13 @@ import {
   User,
 } from "lucide-react";
 import { useChat } from "../context/ChatContext";
+import { useAuth } from "../context/AuthContext";
 
 const SideBar1 = () => {
   const [active, setActive] = useState("chat");
   const location = useLocation();
   const {currentChat} = useChat();
+  const { logout } = useAuth();
 
   const icons = [
     { id: "chat", icon: MessagesSquare, title: "Chat", path: "/" },
@@ -43,13 +45,13 @@ const SideBar1 = () => {
 
         {/* Logout at bottom */}
         <div className="flex justify-end pr-3 pb-6">
-          <Link
+          <div
             title="Logout"
-            to="/logout"
-            className="flex items-center justify-center w-12 h-12 rounded-xl hover:bg-red-50 text-red-500"
+            className="flex items-center justify-center w-12 h-12 rounded-xl hover:bg-red-50 text-red-500 cursor-pointer transition"
+            onClick={logout}
           >
             <LogOutIcon className="w-6 h-6" />
-          </Link>
+          </div>
         </div>
       </div>
 

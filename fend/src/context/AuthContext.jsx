@@ -68,7 +68,19 @@ export const AuthProvider = ({ children }) => {
         setStatus(prev => ({ ...prev, isCheckingAuth: false }));
     }
 
+    const logout = async()=>{
+        try{
+            await api.post('/auth/logout')
+            setAuthUser(null);
+            toast.success("Logged out successfully!")
+        }catch (err) {
+            console.log(err.message)
+            toast.error(err?.response?.data?.message || err.message)
+        }
+    }
+
     const connectSocket = (userId) =>{
+        console.log(userId)
         const socket = io('http://localhost:5000',{
             query:{
                 userId
@@ -96,6 +108,7 @@ export const AuthProvider = ({ children }) => {
                 signup, login,
                 checkAuth, socket,
                 connectSocket, disConnectSocket,
+                logout
             }}
         >
             {children}
