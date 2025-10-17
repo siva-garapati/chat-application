@@ -10,9 +10,8 @@ const DummyChat = () => {
         Select a chat to start messaging
       </h2>
 
-      <p className="mt-2 text-sm text-gray-500 max-w-md">
-        Choose a conversation from the left sidebar to view messages. You can also
-        start a new chat, join a random chat, or explore your profile.
+      <p className="mt-2 text-gray-500 max-w-md">
+        Choose from your existing conversations, or start a new one.
       </p>
 
       <p className="mt-4 text-xs text-gray-400 italic">

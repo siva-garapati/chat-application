@@ -4,7 +4,7 @@ import { useChat } from '../context/ChatContext'
 import { Search } from "lucide-react";
 
 const SideBar2 = ({ className }) => {
-    console.log(className)
+    // console.log(className)
     const { users, getUsers, setCurrentChat, currentChat } = useChat()
     const [filter, setFilter] = useState("all");
 
@@ -12,13 +12,12 @@ const SideBar2 = ({ className }) => {
         getUsers()
     }, [])
 
-    console.log(users, currentChat)
+    // console.log(users, currentChat)
 
     return (
-        <div className={`w-full h-full flex flex-col ${className || ""} border-r border-[hsl(220,13%,91%)] bg-white`}>
+        <div className={`w-full h-full flex flex-col ${className || ""} bg-white`}>
             <div className="sticky top-0 z-10 bg-white px-4 py-3 flex items-center">
-                {/* <img src="/logo.png" alt="Logo" className="h-8 w-8 mr-2" /> */}
-                <h1 className="text-lg font-bold text-gray-800 tracking-tight">ChatBox</h1>
+                <h1 className="text-[22px] font-bold text-gray-800 tracking-tight">ChatBox</h1>
             </div>
 
             {/* Search Bar */}
@@ -39,7 +38,7 @@ const SideBar2 = ({ className }) => {
                 <button
                     onClick={() => setFilter("all")}
                     className={`px-3 py-1.5 text-sm rounded-md transition-colors
-        ${filter === "all"
+                            ${filter === "all"
                             ? "bg-blue-100 text-blue-700"
                             : "hover:bg-gray-100 text-gray-600"
                         }`}
@@ -49,7 +48,7 @@ const SideBar2 = ({ className }) => {
                 <button
                     onClick={() => setFilter("online")}
                     className={`px-3 py-1.5 text-sm rounded-md transition-colors
-        ${filter === "online"
+                            ${filter === "online"
                             ? "bg-blue-100 text-blue-700"
                             : "hover:bg-gray-100 text-gray-600"
                         }`}
@@ -66,7 +65,7 @@ const SideBar2 = ({ className }) => {
                         onClick={() => setCurrentChat(user)}
                         className={`cursor-pointer px-4 py-3 flex items-center gap-3 transition-colors
           ${currentChat?._id === user._id
-                                ? "bg-blue-50 border-r-4 border-blue-400"
+                                ? "bg-blue-50 border-r-4 border-[rgb(29,155,240)]"
                                 : "hover:bg-gray-100"
                             }`}
                     >

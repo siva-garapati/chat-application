@@ -8,6 +8,7 @@ export const ChatContext = createContext(null);
 export const ChatProvider = ({children}) => {
 
     const [users, setUsers] = useState([]);
+    // const [showSearchModal, setShowSearchModal] = useState(false)
     const [currentChat, setCurrentChat] = useState(null);
     const [messages, setMessages] = useState([]);
     const [status, setStatus] = useState({

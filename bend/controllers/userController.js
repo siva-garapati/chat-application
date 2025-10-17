@@ -11,6 +11,7 @@ let register = async (req, res) => {
         if (existingUser) return res.status(400).json({ message: "Email already exists" });
 
         const hashedPassword = await bcrypt.hash(password, 10);
+
         const newUser = new User({
             username,
             email,
@@ -62,21 +63,39 @@ let login = async (req, res) => {
     }
 }
 
-const checkAuth = (req, res) =>{
-    try{
+const checkAuth = (req, res) => {
+    try {
         const user = req.user
         console.log(user)
         res.status(200).json(user);
     }
-    catch(err){
+    catch (err) {
         console.log("Error in checkAuth controller", err.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
 
-const logout = (req,res)=>{
-    try{
-        res.cookie("jwt","", {maxAge:0});
+const searchUsers = async (req, res) => {
+    try {
+        const query = req.query.query;
+
+        if (!query) return res.json([]);
+
+        const users = await User.find({
+            username: { $regex: query, $options: 'i' }
+        }).select('-password');
+
+        res.json(users)
+    }
+    catch (err) {
+        console.log("Error in searchUsers controller", err.message);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+const logout = (req, res) => {
+    try {
+        res.cookie("jwt", "", { maxAge: 0 });
         res.status(200).json({ message: "Logged out successfully" });
     }
     catch (err) {
@@ -85,4 +104,4 @@ const logout = (req,res)=>{
     }
 }
 
-module.exports = { register, login, checkAuth, logout }
+module.exports = { register, login, checkAuth, logout, searchUsers }

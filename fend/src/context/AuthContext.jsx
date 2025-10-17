@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
         isLoggingIn: false,
         isCheckingAuth: true
     });
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const [socket, setSocket] = useState(null)
 
     const signup = async (data) => {
@@ -79,6 +80,21 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const searchUsers = async(query)=>{
+        try{
+            if (query.trim() === '') {
+                setFilteredUsers([]);
+                return;
+            }
+            const res = await api.get(`/auth/searchusers?query=${query}`)
+            setFilteredUsers(res.data)
+            console.log(res.data)
+        }catch(err){
+            console.log("Error in searchUsers", err.message);
+            toast.error(err?.response?.data?.message || err.message)
+        }
+    }
+
     const connectSocket = (userId) =>{
         console.log(userId)
         const socket = io('http://localhost:5000',{
@@ -108,7 +124,7 @@ export const AuthProvider = ({ children }) => {
                 signup, login,
                 checkAuth, socket,
                 connectSocket, disConnectSocket,
-                logout
+                logout, searchUsers, filteredUsers
             }}
         >
             {children}

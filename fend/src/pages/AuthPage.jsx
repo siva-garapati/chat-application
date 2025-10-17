@@ -2,8 +2,8 @@ import { Outlet } from "react-router-dom";
 
 const AuthPage = () => {
   return (
-    <div className="h-screen w-full flex bg-white overflow-hidden">
-      <div className="hidden lg:flex lg:w-[60%] items-center justify-center p-12">
+    <div className="h-screen w-full flex bg-white overflow-hidden sm:px-0">
+      <div className="hidden lg:flex lg:w-[60%] items-center justify-center p-12 bg-gray-50">
         <img
           src="/authImage.png"
           alt="Chat App"

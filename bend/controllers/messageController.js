@@ -2,21 +2,37 @@ const { getReceiverSocketId, io } = require("../libs/socket")
 const Message = require("../models/Message")
 const User = require("../models/User")
 
-const getUsers = async(req, res)=>{
-    try{
-        const loggedInuser = req.user._id
+const getChattedUsers = async (req, res) => {
+    try {
+        const loggedInUser = req.user._id;
 
-        const users = await User.find({_id : {$ne:loggedInuser}}, {password:0})
+        const messages = await Message.find({
+            $or: [{ senderId: loggedInUser }, { receiverId: loggedInUser }],
+        }).sort({ createdAt: -1 });
 
-        // console.log(users)
+        const userMap = new Map();
+        messages.forEach((msg) => {
+            if (!userMap.has(msg.senderId.toString())) {
+                userMap.set(msg.senderId.toString(), msg.createdAt);
+            }
+            if (!userMap.has(msg.receiverId.toString())) {
+                userMap.set(msg.receiverId.toString(), msg.createdAt);
+            }
+        });
 
-        res.status(200).json({'data':'ok', users})
-    }
-    catch(err){
-        console.log("Error in getUsers controller", err.message);
+        const users = await User.find({ _id: { $in: Array.from(userMap.keys()) } }).select("-password");
+
+        const sortedUsers = Array.from(userMap.keys())
+            .map((id) => users.find((u) => u._id.toString() === id))
+            .filter(Boolean);
+
+        res.status(200).json({ users: sortedUsers });
+    } catch (err) {
+        console.log("Error in getChattedUsers controller", err.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};
+
 
 const sendMessages = async(req,res)=>{
     try{
@@ -36,8 +52,9 @@ const sendMessages = async(req,res)=>{
         await newMessage.save()
 
         const receiverSocketId = getReceiverSocketId(receiverId)
+        const senderSocketId = getReceiverSocketId(senderId);
 
-        if(receiverSocketId){
+        if (receiverSocketId && receiverSocketId !== senderSocketId){
             io.to(receiverSocketId).emit('newMessage', newMessage)
         }
 
@@ -71,4 +88,4 @@ const getMessages = async(req,res)=>{
     }
 }
 
-module.exports = {getUsers, sendMessages, getMessages}
+module.exports = { getChattedUsers, sendMessages, getMessages}
