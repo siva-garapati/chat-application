@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
-import LoadingSpinner from "../spinners/LoadingSpinner";
+import LoadingSpinner from "./LoadingSpinner";
 
 const SignUp = () => {
     const [signUpForm, setSignUpForm] = useState({

@@ -17,7 +17,7 @@ const AuthPage = () => {
             ChatBoX
           </h1>
           <p className="text-center text-gray-500 mb-10">
-            Connect with your friends, wherever they are.
+            Connect instantly, chat endlessly.
           </p>
           <Outlet />
         </div>

@@ -11,20 +11,32 @@ import Profile from './pages/Profile';
 import ComingSoon from './pages/ComingSoon';
 import Layout from './components/Layout';
 import NewMessage from './components/NewMessage';
+import { useState } from 'react';
+import SplashScreen from './components/SplashScreen';
 
 const App = () => {
   const { authUser, checkAuth, status } = useAuth();
+  const [showSplash, setShowSplash] = useState(true);
   const location = useLocation();
   const state = location.state || {};
 
   useEffect(() => {
     checkAuth();
+
     console.log('Auth User:', authUser);
+
+    const splashTimer = setTimeout(() => {
+      setShowSplash(false);
+    }, 2000);
+
+    return () => clearTimeout(splashTimer);
   }, []);
+
+  if (showSplash) return <SplashScreen />;
 
   if (status.isCheckingAuth && !authUser) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-100">
+      <div className="flex items-center justify-center h-screen bg-gray-100 text-blu">
         <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
