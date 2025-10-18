@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { useChat } from '../context/ChatContext'
 import { Search } from "lucide-react";
+import ChatBox from './ChatBox';
 
 const SideBar2 = ({ className }) => {
     // console.log(className)
@@ -17,7 +18,7 @@ const SideBar2 = ({ className }) => {
     return (
         <div className={`w-full h-full flex flex-col ${className || ""} bg-white`}>
             <div className="sticky top-0 z-10 bg-white px-4 py-3 flex items-center">
-                <h1 className="text-[22px] font-bold text-gray-800 tracking-tight">ChatBox</h1>
+                <h1 className="text-[22px] font-bold text-gray-800 tracking-tight">ChatBoX</h1>
             </div>
 
             {/* Search Bar */}
